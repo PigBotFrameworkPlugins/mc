@@ -1,0 +1,40 @@
+[{
+    "content": "出生",
+    "usage": "出生",
+    "promise": "anyone",
+    "eval": "mc.spawn()",
+    "description": "出生",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "撸树",
+    "usage": "撸树",
+    "promise": "anyone",
+    "eval": "mc.cuttree()",
+    "description": "撸树",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "我在干什么",
+    "usage": "我在干什么",
+    "promise": "anyone",
+    "eval": "mc.whatimdoing()",
+    "description": "我在干什么",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "我的背包",
+    "usage": "我的背包",
+    "promise": "anyone",
+    "eval": "mc.mybackpack()",
+    "description": "我的背包",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+}]
