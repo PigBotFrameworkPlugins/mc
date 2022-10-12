@@ -37,4 +37,24 @@
     "mode": "我的世界",
     "isHide": 2,
     "type": "command"
+},
+{
+    "content": "挖矿",
+    "usage": "挖矿",
+    "promise": "anyone",
+    "eval": "mc.dig()",
+    "description": "挖矿",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "我的状态",
+    "usage": "我的状态",
+    "promise": "anyone",
+    "eval": "mc.mystatus()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
 }]
