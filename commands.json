@@ -57,4 +57,45 @@
     "mode": "我的世界",
     "isHide": 2,
     "type": "command"
+},
+{
+    "content": "回饱食度",
+    "usage": "回饱食度",
+    "promise": "anyone",
+    "eval": "mc.eat()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "世界时间",
+    "usage": "世界时间",
+    "promise": "anyone",
+    "eval": "mc.worldtime()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "合成 ",
+    "usage": "合成 <物品> <数量，默认为1>",
+    "promise": "anyone",
+    "eval": "mc.make()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+}
+,
+{
+    "content": "合成表",
+    "usage": "合成表",
+    "promise": "anyone",
+    "eval": "mc.listMakeTable()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
 }]
