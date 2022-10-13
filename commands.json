@@ -87,13 +87,32 @@
     "mode": "我的世界",
     "isHide": 2,
     "type": "command"
-}
-,
+},
 {
     "content": "合成表",
     "usage": "合成表",
     "promise": "anyone",
     "eval": "mc.listMakeTable()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "打怪",
+    "usage": "打怪",
+    "promise": "anyone",
+    "eval": "mc.mobsComing()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "丢弃 ",
+    "usage": "丢弃 <物品> <数量，默认为全部>",
+    "promise": "anyone",
+    "eval": "mc.throw()",
     "description": "我的世界",
     "mode": "我的世界",
     "isHide": 2,
