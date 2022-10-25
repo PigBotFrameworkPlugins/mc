@@ -30,17 +30,24 @@ class mc(bot):
         "石剑": [{"name": "原木", "count": 1}, {"name": "圆石", "count": 2}],
         "铁剑": [{"name": "原木", "count": 1}, {"name": "铁锭", "count": 2}],
         "金剑": [{"name": "原木", "count": 1}, {"name": "金锭", "count": 2}],
-        "钻石剑": [{"name": "原木", "count": 1}, {"name": "钻石", "count": 1}]
+        "钻石剑": [{"name": "原木", "count": 1}, {"name": "钻石", "count": 1}],
+        "金苹果": [{"name": "金锭", "count": 72}]
+    }
+    eatList = {
+        "猪肉": 1,
+        "小麦": 1,
+        "金苹果": 5
     }
     
     def init(self):
         self.userItem = self.selectx("SELECT * FROM `botMC` WHERE `qn`={0}".format(self.se.get("user_id")))
         if self.userItem:
-            self.CrashReport(self.userItem, "userItem1")
             self.userItem = self.userItem[0]
-            self.CrashReport(self.userItem, "userItem2")
             self.userItem['backpack'] = json.loads(self.userItem.get('backpack'))
-            
+    
+    def die(self):
+        self.commonx("DELETE FROM `botMC` WHERE `qn`={}".format(self.se.get("user_id")))
+    
     def getKill(self, thi):
         killList = {
             "木剑": 2,
@@ -63,6 +70,11 @@ class mc(bot):
     def addXp(self, num=1):
         self.userItem['xp'] += num
         self.commonx("UPDATE `botMC` SET `xp`={0} WHERE `qn`={1}".format(self.userItem.get("xp"), self.se.get('user_id')))
+    
+    def randomXp(self, low=1, high=10):
+        xp = random.randint(low, high)
+        self.addXp(xp)
+        return xp
     
     def getBackpack(self, thi):
         return self.userItem.get("backpack").get(thi) if self.userItem.get("backpack").get(thi) else 0
@@ -123,7 +135,7 @@ class mc(bot):
         self.addBackpack("原木", gettree)
         self.addEvent("撸树", randtime)
         self.addHungry(-1*hungry)
-        self.send("[CQ:at,qq={0}] 开始撸树\nface54当前时间：[|{1}|]\nface54撸树时长：[|{2}秒|]\nface54获得树木：[|{3}块|]\nface54消耗{4}点饱食度\n顺便送走了{5}只老王，猪肉已加入背包\n请在[|{6}|]再回来领取树木吧！".format(self.se.get('user_id'), time.ctime(nowtime), rand, gettree, hungry, pig, time.ctime(randtime)))
+        self.send("[CQ:at,qq={0}] 开始撸树\nface54当前时间：[|{1}|]\nface54撸树时长：[|{2}秒|]\nface54获得树木：[|{3}块|]\nface54消耗{4}点饱食度\nface54顺便送走了{5}只老王，猪肉已加入背包\nface54获得{6}点经验\n请在[|{7}|]再回来领取树木吧！".format(self.se.get('user_id'), time.ctime(nowtime), rand, gettree, hungry, pig, self.randomXp(), time.ctime(randtime)))
         
     
     def spawn(self):
@@ -178,7 +190,7 @@ class mc(bot):
         
         self.addHungry(hungry)
         self.addEvent("挖矿", randtime)
-        self.send("[CQ:at,qq={0}] 开始挖矿\nface54当前时间：[|{1}|]\nface54挖矿时长：[|{2}秒|]\nface54获得矿物：[{3}]\nface54消耗{4}点饱食度\n请在[|{5}|]再回来吧！".format(self.se.get('user_id'), time.ctime(nowtime), rand, message, hungry, time.ctime(randtime)))
+        self.send("[CQ:at,qq={0}] 开始挖矿\nface54当前时间：[|{1}|]\nface54挖矿时长：[|{2}秒|]\nface54获得矿物：[{3}]\nface54消耗{4}点饱食度\nface54获得{5}点经验\n请在[|{6}|]再回来吧！".format(self.se.get('user_id'), time.ctime(nowtime), rand, message, hungry, self.randomXp(), time.ctime(randtime)))
         
     def check(self):
         self.init()
@@ -198,11 +210,14 @@ class mc(bot):
         if not self.userItem:
             self.send("你还没出生呢，发送 出生")
             return 
-        self.addHungry(self.getBackpack("猪肉"))
-        self.addHungry(self.getBackpack("小麦"))
-        self.send("[CQ:at,qq={}] 已恢复饱食度：\nface54猪肉恢复了{}点饱食度\nface54小麦恢复了{}点饱食度\nface54当前饱食度：{}".format(self.se.get("user_id"), self.getBackpack("猪肉"), self.getBackpack("小麦"), self.userItem.get("hungry")))
-        self.addBackpack("猪肉", -1*self.getBackpack("猪肉"))
-        self.addBackpack("小麦", -1*self.getBackpack("小麦"))
+        message = "[CQ:at,qq={}] 已恢复饱食度：".format(self.se.get("user_id"))
+        for i in self.eatList:
+            self.addHungry(self.getBackpack(i)*self.eatList.get(i))
+            message += "\nface54[|{}恢复了{}点饱食度|]".format(i, self.getBackpack(i)*self.eatList.get(i))
+            self.addBackpack(i, -1*self.getBackpack(i))
+        message += "\nface54[|当前饱食度：{}|]".format(self.userItem.get("hungry"))
+        message += "\nface54[|获得{}点经验|]".format(self.randomXp())
+        self.send(message)
     
     def worldtime(self):
         self.send("face54当前世界中的时间为：[|{}|]".format(time.ctime()))
@@ -210,6 +225,9 @@ class mc(bot):
     def mobsComing(self):
         self.init()
         if self.userItem:
+            if self.userItem.get("life") < 3:
+                self.send("[CQ:at,qq={}] 遇到怪物，您的血量过低，被怪物撸死了！".format(self.se.get("user_id")))
+                return self.die()
             ob = self.rclOb
             if ob == 404:
                 spi = random.randint(0, int(self.userItem.get("life")/2))
@@ -227,8 +245,9 @@ class mc(bot):
             if self.getBackpack(arrow) or arrow == "不使用":
                 if self.userItem.get("life")*self.getKill(arrow) <= kill:
                     self.send("face54[|您的战斗力太低了，被怪物撸死了！|]")
+                    self.die()
                 else:
-                    xp = random.randint(1, 10)
+                    xp = random.randint(1, kill)
                     life = int(kill/2-self.getKill(arrow)) if arrow != "不使用" else int(kill/2)
                     life = life if life >= 0 else 0
                     hungry = random.randint(0, life)
@@ -270,6 +289,7 @@ class mc(bot):
                 self.addBackpack(i.get("name"), int(-1*i.get("count")*count))
                 message += "\n[|    {}: {}个|]".format(i.get("name"), i.get("count")*count)
             self.addBackpack(thi, count)
+            message += "\nface54[|获得{}点经验|]".format(self.randomXp())
             self.send(message)
         else:
             self.send("face54合成表里没有这个物品呢qwq")
@@ -301,5 +321,52 @@ class mc(bot):
             count = int(self.args[-1])
         if count < 0:
             count *= -1
+        if count > self.getBackpack(thi):
+            self.send("丢弃的物品数量多于背包数量，自动矫正")
+            count = self.getBackpack(thi)
         self.addBackpack(thi, -1*count)
-        self.send("face54[|成功！|]")
+        self.addXp(count)
+        self.send("face54[|成功！同时获得经验{}点|]".format(count))
+    
+    def xpToLife(self):
+        self.init()
+        if not self.userItem:
+            self.send("你还没出生呢，发送 出生")
+            return 
+        if self.args[0] == self.args[-1]:
+            xp = self.userItem.get('xp')
+        else:
+            xp = int(self.args[-1])
+        life = int(xp/5)
+        self.addXp(-1*xp)
+        self.addLife(life)
+        self.send("[CQ:at,qq={}] 已兑换！\nface54[|消耗{}点经验|]\nface54[|回了{}滴血|]".format(self.se.get("user_id"), xp, life))
+    
+    def giveout(self):
+        to = self.args[1]
+        thi = self.args[2]
+        if self.args[2] == self.args[-1]:
+            count = self.getBackpack(thi)
+        else:
+            count = self.args[-1]
+    
+    def lifeToHungry(self):
+        self.init()
+        if not self.userItem:
+            self.send("你还没出生呢，发送 出生")
+            return 
+        life = int(self.args[1])
+        hungry = int(life/5)
+        self.addHungry(hungry)
+        self.addLife(-1*life)
+        self.send("[CQ:at,qq={}] 已兑换！\nface54[|消耗{}滴血|]\nface54[|回了{}点饱食度|]".format(self.se.get("user_id"), life, hungry))
+    
+    def pvp(self):
+        pass
+    
+    def messageListener(self):
+        randnum = random.randint(0, int(settings.get("MC_random")))
+        if randnum == 3:
+            self.mobsComing()
+        elif randnum == 4:
+            self.save()

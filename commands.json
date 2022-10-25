@@ -117,4 +117,34 @@
     "mode": "我的世界",
     "isHide": 2,
     "type": "command"
+},
+{
+    "content": "经验兑换血量",
+    "usage": "经验兑换血量 <要兑换的经验的数量，默认为全部>",
+    "promise": "anyone",
+    "eval": "mc.xpToLife()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "血量兑换饱食度",
+    "usage": "血量兑换饱食度 <要兑换的血量的数量>",
+    "promise": "anyone",
+    "eval": "mc.lifeToHungry()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "command"
+},
+{
+    "content": "MCMessageListener",
+    "usage": "MCMessageListener",
+    "promise": "anyone",
+    "eval": "mc.messageListener()",
+    "description": "我的世界",
+    "mode": "我的世界",
+    "isHide": 2,
+    "type": "message"
 }]
