@@ -40,13 +40,13 @@ class mc(bot):
     }
     
     def init(self):
-        self.userItem = self.selectx("SELECT * FROM `botMC` WHERE `qn`={0}".format(self.se.get("user_id")))
+        self.userItem = self.selectx("SELECT * FROM `botMC` WHERE `qn`=%s", (self.se.get("user_id")))
         if self.userItem:
             self.userItem = self.userItem[0]
             self.userItem['backpack'] = json.loads(self.userItem.get('backpack'))
     
     def die(self):
-        self.commonx("DELETE FROM `botMC` WHERE `qn`={}".format(self.se.get("user_id")))
+        self.commonx("DELETE FROM `botMC` WHERE `qn`=%s", (self.se.get("user_id")))
     
     def getKill(self, thi):
         killList = {
@@ -65,11 +65,11 @@ class mc(bot):
     
     def addLife(self, num=1):
         self.userItem['life'] += num
-        self.commonx("UPDATE `botMC` SET `life`={0} WHERE `qn`={1}".format(self.userItem.get("life"), self.se.get('user_id')))
+        self.commonx("UPDATE `botMC` SET `life`=%s WHERE `qn`=%s", (self.userItem.get("life"), self.se.get('user_id')))
     
     def addXp(self, num=1):
         self.userItem['xp'] += num
-        self.commonx("UPDATE `botMC` SET `xp`={0} WHERE `qn`={1}".format(self.userItem.get("xp"), self.se.get('user_id')))
+        self.commonx("UPDATE `botMC` SET `xp`=%s WHERE `qn`=%s", (self.userItem.get("xp"), self.se.get('user_id')))
     
     def randomXp(self, low=1, high=10):
         xp = random.randint(low, high)
@@ -85,17 +85,17 @@ class mc(bot):
         else:
             self.userItem['backpack'][thi] = num
         self.userItem["backpack"][thi] = self.userItem.get("backpack").get(thi) if self.userItem.get("backpack").get(thi) >= 0 else 0
-        self.commonx("UPDATE `botMC` SET `backpack`='{0}' WHERE `qn`={1}".format(json.dumps(self.userItem.get("backpack"), ensure_ascii=False), self.se.get('user_id')))
+        self.commonx("UPDATE `botMC` SET `backpack`=%s WHERE `qn`=%s", (json.dumps(self.userItem.get("backpack"), ensure_ascii=False), self.se.get('user_id')))
     
     def addEvent(self, doing, utill):
-        self.commonx("UPDATE `botMC` SET `doing`='{0}', `doingutill`={1} WHERE `qn`={2}".format(doing, utill, self.se.get('user_id')))
+        self.commonx("UPDATE `botMC` SET `doing`=%s, `doingutill`=%s WHERE `qn`=%s", (doing, utill, self.se.get('user_id')))
         
     def ifDoing(self):
         return True if (self.userItem.get("doing") and self.userItem.get("doingutill")) and (self.userItem.get("doingutill") > int(time.time())) else False
     
     def addHungry(self, num):
         self.userItem['hungry'] += num
-        self.commonx("UPDATE `botMC` SET `hungry`={0} WHERE `qn`={1}".format(self.userItem.get("hungry"), self.se.get('user_id')))
+        self.commonx("UPDATE `botMC` SET `hungry`=%s WHERE `qn`=%s", (self.userItem.get("hungry"), self.se.get('user_id')))
     
     def mybackpack(self):
         self.init()
@@ -144,7 +144,7 @@ class mc(bot):
         if self.userItem:
             self.send("你还没死呢，无法重生！")
             return 
-        self.commonx("INSERT INTO `botMC` (`qn`, `name`, `life`, `hungry`, `backpack`, `achievement`) VALUES ({0}, '{1}', 20, 20, '{2}', '[]');".format(uid, self.se.get('sender').get('nickname'), "{}"))
+        self.commonx("INSERT INTO `botMC` (`qn`, `name`, `life`, `hungry`, `backpack`, `achievement`) VALUES (%s, %s, 20, 20, '{}', '[]');", (uid, self.se.get('sender').get('nickname')))
         self.send("[CQ:at,qq={0}] 您已出生！\nface54初始生命值：20\nface54初始饱食度：20\n您接下来可以尝试撸树\n\n提示：MC功能机器人发送的所有时间都是UTC时间，与CST时间时差8小时！".format(uid))
         
     def dig(self):
