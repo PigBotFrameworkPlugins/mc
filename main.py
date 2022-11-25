@@ -31,7 +31,8 @@ class mc(bot):
         "铁剑": [{"name": "原木", "count": 1}, {"name": "铁锭", "count": 2}],
         "金剑": [{"name": "原木", "count": 1}, {"name": "金锭", "count": 2}],
         "钻石剑": [{"name": "原木", "count": 1}, {"name": "钻石", "count": 1}],
-        "金苹果": [{"name": "金锭", "count": 72}]
+        "金苹果": [{"name": "金锭", "count": 72}],
+        "鱼竿": [{"name":"原木", "count":2}, {"name":"线", "count":2}]
     }
     eatList = {
         "猪肉": 1,
@@ -228,7 +229,7 @@ class mc(bot):
             if self.userItem.get("life") < 3:
                 self.send("[CQ:at,qq={}] 遇到怪物，您的血量过低，被怪物撸死了！".format(self.se.get("user_id")))
                 return self.die()
-            ob = self.rclOb
+            ob = self.rclOb or self.ReadCommandListener()
             if ob == 404:
                 spi = random.randint(0, int(self.userItem.get("life")/2))
                 ski = random.randint(0, int(self.userItem.get("life")/2))
