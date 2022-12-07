@@ -367,6 +367,8 @@ class mc(bot):
     
     def messageListener(self):
         settings = self.groupSettings
+        if not settings:
+            return
         if settings.get("MC_random") == 0:
             return
         randnum = random.randint(0, int(settings.get("MC_random")))
