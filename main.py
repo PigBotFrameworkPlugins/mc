@@ -111,6 +111,9 @@ class mc(bot):
     
     def mystatus(self):
         self.init()
+        if not self.userItem:
+            self.send("你还没出生呢，发送 出生")
+            return 
         self.send("[CQ:at,qq={}] 您的状态：\nface54您的血量：{}\nface54您的饱食度：{}\nface54您的经验：{}".format(self.se.get("user_id"), self.userItem.get("life"), self.userItem.get("hungry"), self.userItem.get("xp")))
     
     def whatimdoing(self):
